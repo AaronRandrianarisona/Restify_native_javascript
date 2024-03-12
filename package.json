@@ -1,0 +1,19 @@
+{
+  "name": "tpaos6",
+  "version": "1.0.0",
+  "description": "TDTP3",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "FB",
+  "license": "ISC",
+  "dependencies": {
+    "async-seq": "^0.2.9",
+    "chai": "^4.2.0",
+    "deep-equal-in-any-order": "^1.0.28",
+    "restify": "^11.1.0",
+    "restify-clients": "^2.6.8"
+  }
+}

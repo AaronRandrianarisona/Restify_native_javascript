@@ -1,0 +1,25 @@
+[
+    {
+        "isbn": "ZT56",
+        "title": "Essai",
+        "authors": [
+            {
+                "id": 1
+            },
+            {
+                "id": 2
+            }
+        ],
+        "price": 12.4
+    },
+    {
+        "isbn": "ZT57",
+        "title": "Roman",
+        "authors": [
+            {
+                "id": 1
+            }
+        ],
+        "price": 8
+    }
+]

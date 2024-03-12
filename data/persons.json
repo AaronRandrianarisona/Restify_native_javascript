@@ -1,0 +1,25 @@
+[
+  {
+    "id": 1,
+    "firstname": "Pierre",
+    "lastname": "Durand",
+    "books": [
+      {
+        "isbn": "ZT56"
+      },
+      {
+        "isbn": "ZT57"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "firstname": "Paul",
+    "lastname": "Martin",
+    "books": [
+      {
+        "isbn": "ZT56"
+      }
+    ]
+  }
+]
