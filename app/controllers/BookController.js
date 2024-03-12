@@ -42,6 +42,28 @@ exports.getBook = function (req, res, next) {
     }
 };
 
+exports.getBookV2 = function (req, res, next) {
+    if (req.params.isbn) {
+        console.log("getBook isbn = %j", req.params.isbn);
+        BookModel.getOneBook(req.params.isbn, function (status, book) {
+            book.authors.forEach(author => { //Implementation HAL pour chaque auteurs
+                author["authorLink"] = Server.getServer().router.render('person', {id: author.id})
+            });
+            res.json(status,book)
+            return book
+        })
+    } else {
+        BookModel.getBooks(function (err, books) {
+            if (err) {
+                return next(err);
+            } else {
+                res.json(200, books);
+                return next();
+            }
+        })
+    }
+};
+
 exports.postBook = function (req, res, next) {
     if (req.body.isbn) {
         BookModel.postBook(req.body, function (status, book) {

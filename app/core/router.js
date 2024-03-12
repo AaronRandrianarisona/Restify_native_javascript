@@ -28,7 +28,12 @@ server.use(restify.plugins.queryParser()); // needed for query parameter request
 /**Get configuration */
 ////-------Configuration Books----------/////
 server.get("/api/books", controllers.BookController.getBook);
-server.get("/api/books/:isbn",controllers.BookController.getBook)
+// server.get("/api/books/:isbn",controllers.BookController.getBook)
+server.get("/api/books/:isbn", restify.plugins.conditionalHandler([
+    { version: '1.0.0', handler: controllers.BookController.getBook },
+    { version: '2.0.0', handler: controllers.BookController.getBookV2 }
+  ]));
+
 // server.get("/api/books/:isbn/authors",controllers.BookController.getAuthors)
 server.get("/api/books/:isbn/authors", restify.plugins.conditionalHandler([
     { version: '1.0.0', handler: controllers.BookController.getAuthors },
@@ -36,7 +41,7 @@ server.get("/api/books/:isbn/authors", restify.plugins.conditionalHandler([
   ]));
 ////-------Configuration Persons--------/////
 server.get("/api/persons", controllers.PersonController.getPerson)
-server.get("/api/persons/:id",controllers.PersonController.getPerson)
+server.get({name: "person",path: "/api/persons/:id"},controllers.PersonController.getPerson)
 /**Post configuration */
 ////-------Configuration Books----------/////
 server.post("/api/books",controllers.BookController.postBook)
