@@ -67,11 +67,10 @@ server.listen(port, function (err) {
     }
 });
 
-/** function called just before server shutdown
+/** function called just before server shutdown */
 process.on('SIGINT', function () {
     // pseudo persistence : backup current data into JSON files
     controllers.BookController.saveStorage();
     controllers.PersonController.saveStorage();
     process.exit(0);
 });
-*/
