@@ -10,14 +10,13 @@ let fs = require('fs'),
 exports.initStorage = async function (PersonMongo) {
     let persons = PersonModel.loadPersons();
     persons.forEach(async (person) => {
-        await PersonMongo.create({ ...person, books: []})
+        await PersonMongo.create({ ...person })
         .then(docPerson => {
             console.log("\n>> Created Person:\n", docPerson);
             return docPerson;
         })
     });
     console.log("Persons loaded: %j", persons);
-    return persons
 };
 
 /**

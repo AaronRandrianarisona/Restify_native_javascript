@@ -31,7 +31,7 @@ const bookSchema = new mongoose.Schema({
     title: String,
     authors: [
         // {id: Number}
-        { type: mongoose.Schema.Types.Object, ref: 'Person' }
+        { type: Object, ref: 'Person' }
     ],
     price: Number
 })
@@ -117,37 +117,9 @@ server.listen(port, async function (err) {
         // pseudo persistence : load data from JSON file
 
         await mongoose.connect('mongodb://localhost:27017/books').then(async () => {
-            const local_books = await controllers.BookController.initStorage(Book);
-            const local_persons = await controllers.PersonController.initStorage(Person);
-            const books = await Book.find({})
-            books.forEach((book) => {
-                const local_book = local_books.filter((b) => b.isbn == book.isbn)[0]
-                local_book.authors.forEach(async (person) => {
-                    await Person.findOneAndUpdate(
-                        { id: person.id },
-                        { $push: { books: { isbn: book.isbn } } },
-                        { new: true, useFindAndModify: false }
-                    )
-                });
-            })
-
-            const persons = await Person.find({})
-            persons.forEach((person) => {
-                const local_person = local_persons.filter((p) => p.id == person.id)[0]
-                local_person.books.forEach(async (book) => {
-                    await Book.findOneAndUpdate(
-                        { isbn: book.isbn },
-                        { $push: { authors: person._id } },
-                        { new: true, useFindAndModify: false }
-                    )
-                });
-            })
+            await controllers.BookController.initStorage(Book);
+            await controllers.PersonController.initStorage(Person);
         })
-        // var book_simple = await createBook({isbn: "ZT57",title: "Roman",price: 8 })
-        // var person_simple = await createPerson({id: 1, firstname: "Pierre", lastname: "Durand"})
-        // var book = await addPersonToBook(book_simple._id,person_simple)
-        // var person = await  addBookToPerson(person_simple._id,book_simple)
-
 
         console.log('App is ready at : ' + port);
     }

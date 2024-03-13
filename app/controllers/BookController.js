@@ -10,7 +10,7 @@ let fs = require('fs'),
 exports.initStorage = async function (BookMongo) {
     let books = BookModel.loadBooks();
     books.forEach(async (book) => {
-        await BookMongo.create({...book, authors: []})
+        await BookMongo.create({ ...book })
         .then(docBook => {
             console.log("\n>> Created Book:\n", docBook);
             return docBook;
@@ -18,7 +18,6 @@ exports.initStorage = async function (BookMongo) {
     })
     //
     console.log("Books loaded: %j", books);
-    return books
 };
 
 /**
