@@ -35,7 +35,7 @@ const bookSchema = new mongoose.Schema({
     ],
     price: Number
 })
-const Book = mongoose.model('Book', bookSchema)
+const BookMongo = mongoose.model('Book', bookSchema)
 
 const personSchema = new mongoose.Schema({
     id: Number,
@@ -46,38 +46,15 @@ const personSchema = new mongoose.Schema({
         { type: Object, ref: 'Book' }
     ]
 })
-const Person = mongoose.model('Person', personSchema)
+const PersonMongo = mongoose.model('Person', personSchema)
 
-//--gestion relation many-to-many ----------//
-const createBook = function (book) {
-    return Book.create(book).then(docBook => {
-        console.log("\n>> Created Book:\n", docBook);
-        return docBook;
-    })
+exports.getPersonMongo = function() {
+    return PersonMongo
+}
+exports.getBookMongo = function() {
+    return BookMongo
 }
 
-const createPerson = function (person) {
-    return Person.create(person).then(docPerson => {
-        console.log("\n>> Created Person:\n", docPerson);
-        return docPerson;
-    })
-}
-
-const addPersonToBook = function (bookId, person) {
-    return Book.findByIdAndUpdate(
-        bookId,
-        { $push: { authors: person.id } },
-        { new: true, useFindAndModify: false }
-    );
-};
-
-const addBookToPerson = function (personId, book) {
-    return Person.findByIdAndUpdate(
-        personId,
-        { $push: { books: book._id } },
-        { new: true, useFindAndModify: false }
-    );
-};
 // route configuration
 /**Get configuration */
 ////-------Configuration Books----------/////
@@ -117,8 +94,9 @@ server.listen(port, async function (err) {
         // pseudo persistence : load data from JSON file
 
         await mongoose.connect('mongodb://localhost:27017/books').then(async () => {
-            await controllers.BookController.initStorage(Book);
-            await controllers.PersonController.initStorage(Person);
+            mongoose.connection.db.dropDatabase();
+            await controllers.BookController.initStorage(BookMongo);
+            await controllers.PersonController.initStorage(PersonMongo);
         })
 
         console.log('App is ready at : ' + port);

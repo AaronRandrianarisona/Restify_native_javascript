@@ -126,13 +126,13 @@ exports.putBook = function (req, res, next) {
 
 exports.getAuthors = function (req, res, next) {
     if (req.params.isbn) {
-        BookModel.getAuthors(req.params.isbn, function (status, authors) {
+        BookModel.getAuthors(req.params.isbn, async function (status, authors) {
             switch (status) {
                 case 200:
-                    res.json(status, authors)
+                    await res.json(status, authors)
                     return authors
                 case 404:
-                    res.json(status, authors)
+                    await res.json(status, authors)
                     break
             }
         })
@@ -141,13 +141,13 @@ exports.getAuthors = function (req, res, next) {
 
 exports.getAuthorsV2 = function (req, res, next) {
     if (req.params.isbn) {
-        BookModel.getAuthorsV2(req.params.isbn, function (status, authors) {
+        BookModel.getAuthorsV2(req.params.isbn, async function (status, authors) {
             switch (status) {
                 case 200:
-                    res.json(status, authors)
+                    await res.json(status, authors)
                     return authors
                 case 404:
-                    res.json(status, authors)
+                    await res.json(status, authors)
                     break
             }
         })

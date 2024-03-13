@@ -1,4 +1,5 @@
-let fs = require('fs');
+let fs = require('fs'),
+    router = require(process.cwd() + "/app/core/router.js")
 
 // global person array
 let persons = []
@@ -40,13 +41,13 @@ exports.savePersons = function () {
 /**
  * Get all Persons objects
  */
-exports.getPersons = function (callback) {
-    callback(null,persons);
+exports.getPersons = async function (callback) {
+    callback(null,await router.getPersonMongo().find({}).sort('id'));
 };
 
-exports.getOnePerson = function(id, callback) {
+exports.getOnePerson = async function(id, callback) {
     let status = 200
-    let person = persons.filter((p) => p.id == id)[0]
+    let person = await router.getPersonMongo().findOne({id: id})
     if(!person) {
         status = 404
     }
