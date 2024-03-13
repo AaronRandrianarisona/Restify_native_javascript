@@ -116,29 +116,23 @@ server.listen(port, async function (err) {
         controllers.BookController.initStorage();
         controllers.PersonController.initStorage();
 
-        await mongoose.connect('mongodb://localhost:27017/books')
-        var book_simple = await createBook({isbn: "ZT57",title: "Roman",price: 8 })
-        var person_simple = await createPerson({id: 1, firstname: "Pierre", lastname: "Durand"})
-        var book = await addPersonToBook(book_simple._id,person_simple)
-        var person = await  addBookToPerson(person_simple._id,book_simple)
-
-
-        // let person = null
-        // const book = new Book({isbn: "ZT57",title: "Roman", authors: [
-        //     person = new Person({id: 1, firstname: "Pierre", lastname: "Durand", books: [
-        //         this
-        //     ]})
-        // ],price: 8})
-
+        await mongoose.connect('mongodb://localhost:27017/books').then(async () => {
+            var book_simple = await createBook({isbn: "ZT57",title: "Roman",price: 8 })
+            var person_simple = await createPerson({id: 1, firstname: "Pierre", lastname: "Durand"})
+            var book = await addPersonToBook(book_simple._id,person_simple)
+            var person = await  addBookToPerson(person_simple._id,book_simple)
+            
+    
+        })
         console.log('App is ready at : ' + port);
     }
 });
 
-/** function called just before server shutdown
+/** function called just before server shutdown */
 process.on('SIGINT', function () {
     // pseudo persistence : backup current data into JSON files
     controllers.BookController.saveStorage();
     controllers.PersonController.saveStorage();
+    mongoose.connection.db.dropDatabase()
     process.exit(0);
 });
-*/

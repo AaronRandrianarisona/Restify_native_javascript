@@ -9,6 +9,8 @@ let fs = require('fs'),
  */
 exports.initStorage = function () {
     let books = BookModel.loadBooks();
+    
+    //
     console.log("Books loaded: %j", books);
 };
 
