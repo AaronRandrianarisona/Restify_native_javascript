@@ -30,7 +30,8 @@ const bookSchema = new mongoose.Schema({
     isbn: String,
     title: String,
     authors: [
-        { type: mongoose.Schema.Types.ObjectId, ref: 'Person' }
+        // {id: Number}
+        { type: mongoose.Schema.Types.Object, ref: 'Person' }
     ],
     price: Number
 })
@@ -41,7 +42,8 @@ const personSchema = new mongoose.Schema({
     firstname: String,
     lastname: String,
     books: [
-        { type: mongoose.Schema.Types.ObjectId, ref: 'Book' }
+        // { isbn: String }
+        { type: Object, ref: 'Book' }
     ]
 })
 const Person = mongoose.model('Person', personSchema)
@@ -61,21 +63,21 @@ const createPerson = function (person) {
     })
 }
 
-const addPersonToBook = function(bookId, person) {
+const addPersonToBook = function (bookId, person) {
     return Book.findByIdAndUpdate(
-      bookId,
-      { $push: { authors: person._id } },
-      { new: true, useFindAndModify: false }
+        bookId,
+        { $push: { authors: person.id } },
+        { new: true, useFindAndModify: false }
     );
-  };
+};
 
-  const addBookToPerson = function(personId, book) {
+const addBookToPerson = function (personId, book) {
     return Person.findByIdAndUpdate(
-      personId,
-      { $push: { books: book._id } },
-      { new: true, useFindAndModify: false }
+        personId,
+        { $push: { books: book._id } },
+        { new: true, useFindAndModify: false }
     );
-  };
+};
 // route configuration
 /**Get configuration */
 ////-------Configuration Books----------/////
@@ -112,18 +114,41 @@ server.listen(port, async function (err) {
     if (err)
         console.error(err)
     else {
-        // pseudo persistence : load data from JSON files
-        controllers.BookController.initStorage();
-        controllers.PersonController.initStorage();
+        // pseudo persistence : load data from JSON file
 
         await mongoose.connect('mongodb://localhost:27017/books').then(async () => {
-            var book_simple = await createBook({isbn: "ZT57",title: "Roman",price: 8 })
-            var person_simple = await createPerson({id: 1, firstname: "Pierre", lastname: "Durand"})
-            var book = await addPersonToBook(book_simple._id,person_simple)
-            var person = await  addBookToPerson(person_simple._id,book_simple)
-            
-    
+            const local_books = await controllers.BookController.initStorage(Book);
+            const local_persons = await controllers.PersonController.initStorage(Person);
+            const books = await Book.find({})
+            books.forEach((book) => {
+                const local_book = local_books.filter((b) => b.isbn == book.isbn)[0]
+                local_book.authors.forEach(async (person) => {
+                    await Person.findOneAndUpdate(
+                        { id: person.id },
+                        { $push: { books: { isbn: book.isbn } } },
+                        { new: true, useFindAndModify: false }
+                    )
+                });
+            })
+
+            const persons = await Person.find({})
+            persons.forEach((person) => {
+                const local_person = local_persons.filter((p) => p.id == person.id)[0]
+                local_person.books.forEach(async (book) => {
+                    await Book.findOneAndUpdate(
+                        { isbn: book.isbn },
+                        { $push: { authors: person._id } },
+                        { new: true, useFindAndModify: false }
+                    )
+                });
+            })
         })
+        // var book_simple = await createBook({isbn: "ZT57",title: "Roman",price: 8 })
+        // var person_simple = await createPerson({id: 1, firstname: "Pierre", lastname: "Durand"})
+        // var book = await addPersonToBook(book_simple._id,person_simple)
+        // var person = await  addBookToPerson(person_simple._id,book_simple)
+
+
         console.log('App is ready at : ' + port);
     }
 });

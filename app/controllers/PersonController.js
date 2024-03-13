@@ -7,9 +7,17 @@ let fs = require('fs'),
  * Init book set.
  */
 
-exports.initStorage = function () {
+exports.initStorage = async function (PersonMongo) {
     let persons = PersonModel.loadPersons();
+    persons.forEach(async (person) => {
+        await PersonMongo.create({ ...person, books: []})
+        .then(docPerson => {
+            console.log("\n>> Created Person:\n", docPerson);
+            return docPerson;
+        })
+    });
     console.log("Persons loaded: %j", persons);
+    return persons
 };
 
 /**

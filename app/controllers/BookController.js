@@ -7,11 +7,18 @@ let fs = require('fs'),
 /**
  * Init book set.
  */
-exports.initStorage = function () {
+exports.initStorage = async function (BookMongo) {
     let books = BookModel.loadBooks();
-    
+    books.forEach(async (book) => {
+        await BookMongo.create({...book, authors: []})
+        .then(docBook => {
+            console.log("\n>> Created Book:\n", docBook);
+            return docBook;
+        })
+    })
     //
     console.log("Books loaded: %j", books);
+    return books
 };
 
 /**
