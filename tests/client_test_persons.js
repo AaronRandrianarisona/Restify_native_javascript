@@ -4,7 +4,7 @@ let restify = require('restify-clients'),
 
 let client = restify.createJsonClient({
     url: 'http://localhost:3000',
-    version: '2.0.0' //utilisation de la version 2.0.0 au lieu de 1.0.0
+    version: '1.0.0'
 });
 
 async.seq(
@@ -13,8 +13,8 @@ async.seq(
         client.get('/api/persons', function (err, req, res, persons) {
             assert.ifError(err);
             //console.log('get %j', persons);
-            assert.deepEqual(persons, [{id:1,firstname:"Pierre",lastname:"Durand",books:[{isbn:"ZT56"},{isbn:"ZT57"}]},
-                                       {id:2,firstname:"Paul",lastname:"Martin",books:[{isbn:"ZT56"}]}], 'Pb get (test1)');
+            assert.deepEqual(persons, [{id:1,firstname:"Pierre",lastname:"Durand",books:[{isbn:"ZT56"},{isbn:"ZT57"}],"_id":persons[0]._id,"__v":persons[0].__v},
+                                       {id:2,firstname:"Paul",lastname:"Martin",books:[{isbn:"ZT56"}],"_id":persons[1]._id,"__v":persons[1].__v}], 'Pb get (test1)');
             callback(null, 'test1');
         })
     },
@@ -23,7 +23,7 @@ async.seq(
         client.get('/api/persons/1', function (err, req, res, person) {
             assert.ifError(err);
             //console.log('get %j', person);
-            assert.deepEqual(person, {id:1,firstname:"Pierre",lastname:"Durand",books:[{isbn:"ZT56"},{isbn:"ZT57"}]}, 'Pb get (test2)');
+            assert.deepEqual(person, {id:1,firstname:"Pierre",lastname:"Durand",books:[{isbn:"ZT56"},{isbn:"ZT57"}],"_id":person._id,"__v":person.__v}, 'Pb get (test2)');
             callback(null, tst + ' ' + 'test2');
         })
     },

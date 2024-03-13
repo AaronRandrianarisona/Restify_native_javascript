@@ -14,10 +14,10 @@ async.seq(
             assert.ifError(err);
             console.log('get %j', book);
             clientV2.get(book.authors[0].authorLink, function (err, req, res, author) {
-                assert.deepEqual(author, {id:1,firstname:"Pierre",lastname:"Durand",books:[{isbn:"ZT56"},{isbn:"ZT57"}]}, 'Pb get (test1a)');
+                assert.deepEqual(author, {id:1,firstname:"Pierre",lastname:"Durand",books:[{isbn:"ZT56"},{isbn:"ZT57"}],"_id":author._id,"__v":author.__v}, 'Pb get (test1a)');
                 //callback(null, 'test11');
                 clientV2.get(book.authors[1].authorLink, function (err, req, res, author) {
-                    assert.deepEqual(author, {id:2,firstname:"Paul",lastname:"Martin",books:[{isbn:"ZT56"}]}, 'Pb get (test1b)');
+                    assert.deepEqual(author, {id:2,firstname:"Paul",lastname:"Martin",books:[{isbn:"ZT56"}],"_id":author._id,"__v":author.__v}, 'Pb get (test1b)');
                     callback(null, 'test1');
                 })
             })
@@ -29,7 +29,7 @@ async.seq(
             assert.ifError(err);
             //console.log('get %j', book);
             clientV2.get(book.authors[0].authorLink, function (err, req, res, author) {
-                assert.deepEqual(author, {id:1,firstname:"Pierre",lastname:"Durand",books:[{isbn:"ZT56"},{isbn:"ZT57"}]}, 'Pb get (test2)');
+                assert.deepEqual(author, {id:1,firstname:"Pierre",lastname:"Durand",books:[{isbn:"ZT56"},{isbn:"ZT57"}],"_id":author._id,"__v":author.__v}, 'Pb get (test2)');
                 callback(null, tst + ' ' + 'test2');
             })
         })

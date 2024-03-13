@@ -13,8 +13,8 @@ async.seq(
         client.get('/api/books', function (err, req, res, books) {
             assert.ifError(err);
             //console.log('get %j', books);
-            assert.deepEqual(books, [{"isbn":"ZT56","title":"Essai","authors":[{"id":1},{"id":2}],"price":12.4},
-                                     {"isbn":"ZT57","title":"Roman","authors":[{"id":1}],"price":8}], 'Pb get (test1)');
+            assert.deepEqual(books, [{"isbn":"ZT56","title":"Essai","authors":[{"id":1},{"id":2}],"price":12.4,"_id":books[0]._id,"__v":books[0].__v},
+                                     {"isbn":"ZT57","title":"Roman","authors":[{"id":1}],"price":8,"_id":books[1]._id,"__v":books[1].__v}], 'Pb get (test1)');
             callback(null, 'test1');
         })
     },
@@ -24,7 +24,7 @@ async.seq(
         client.get('/api/books/ZT56', function (err, req, res, book) {
             assert.ifError(err);
             //console.log('get %j', book);
-            assert.deepEqual(book, {isbn: "ZT56", title: "Essai",authors:[{id:1},{id:2}],price:12.4}, 'Pb get (test2)');
+            assert.deepEqual(book, {isbn: "ZT56", title: "Essai",authors:[{id:1},{id:2}],price:12.4,"_id":book._id,"__v":book.__v}, 'Pb get (test2)');
             callback(null, tst + ' ' + 'test2');
         })
     },
@@ -33,7 +33,7 @@ async.seq(
         client.post('/api/books', {isbn: "ZT58", title: "Nouvelle", authors:[{id:2}],price:15}, function (err, req, res, book) {
             assert.ifError(err);
             //console.log('post %j', book);
-            assert.deepEqual(book, {isbn: "ZT58", title: "Nouvelle", authors:[{id:2}],price:15}, 'Pb post (test3)')
+            assert.deepEqual(book, {isbn: "ZT58", title: "Nouvelle", authors:[{id:2}],price:15,"_id":book._id,"__v":book.__v}, 'Pb post (test3)')
             callback(null, tst + ' ' + 'test3');
         })
     },
@@ -50,7 +50,7 @@ async.seq(
         client.get('/api/books/ZT58', function (err, req, res, book) {
             assert.ifError(err);
             //console.log('get %j', book);
-            assert.deepEqual(book, {isbn: "ZT58", title: "Nouvelle", authors:[{id:2}],price:15}, 'Pb get (test5)')
+            assert.deepEqual(book, {isbn: "ZT58", title: "Nouvelle", authors:[{id:2}],price:15,"_id":book._id,"__v":book.__v}, 'Pb get (test5)')
             callback(null, tst + ' ' + 'test5');
         })
     },
@@ -59,7 +59,7 @@ async.seq(
         client.del('/api/books/ZT58', function (err, req, res, book) {
             assert.ifError(err);
             //console.log('del %j', book);
-            assert.deepEqual(book, {isbn: "ZT58", title: "Nouvelle", authors:[{id:2}],price:15}, 'Pb del (test6)');
+            assert.deepEqual(book, {isbn: "ZT58", title: "Nouvelle", authors:[{id:2}],price:15,"_id":book._id,"__v":book.__v}, 'Pb del (test6)');
             callback(null, tst + ' ' + 'test6');
         })
     },
@@ -76,7 +76,7 @@ async.seq(
         client.put('/api/books/ZT56', {"title": "Roman"}, function (err, req, res, updatedBook) {
             assert.ifError(err);
             //console.log('put %j', updatedBook);
-            assert.deepEqual(updatedBook, {isbn: "ZT56", title: "Roman",authors:[{id:1},{id:2}],price:12.4}, 'Pb put (test8)');
+            assert.deepEqual(updatedBook, {isbn: "ZT56", title: "Roman",authors:[{id:1},{id:2}],price:12.4,"_id":updatedBook._id,"__v":updatedBook.__v}, 'Pb put (test8)');
             callback(null, tst + ' ' + 'test8');
         })
     },
@@ -85,7 +85,7 @@ async.seq(
         client.put('/api/books/ZT56', {"title": "Essai"}, function (err, req, res, updatedBook) {
             assert.ifError(err);
             //console.log('put %j', updatedBook);
-            assert.deepEqual(updatedBook, {isbn: "ZT56", title: "Essai",authors:[{id:1},{id:2}],price:12.4}, 'Pb put (test9)');
+            assert.deepEqual(updatedBook, {isbn: "ZT56", title: "Essai",authors:[{id:1},{id:2}],price:12.4,"_id":updatedBook._id,"__v":updatedBook.__v}, 'Pb put (test9)');
             callback(null, tst + ' ' + 'test9');
         })
     },
@@ -94,8 +94,8 @@ async.seq(
         client.get('/api/books', function (err, req, res, books) {
             assert.ifError(err);
             //console.log('get %j', books);
-            assert.deepEqual(books, [{"isbn":"ZT56","title":"Essai","authors":[{"id":1},{"id":2}],"price":12.4},
-                {"isbn":"ZT57","title":"Roman","authors":[{"id":1}],"price":8}], 'Pb get (test10)');
+            assert.deepEqual(books, [{"isbn":"ZT56","title":"Essai","authors":[{"id":1},{"id":2}],"price":12.4,"_id":books[0]._id,"__v":books[0].__v},
+                {"isbn":"ZT57","title":"Roman","authors":[{"id":1}],"price":8,"_id":books[1]._id,"__v":books[1].__v}], 'Pb get (test10)');
             callback(null, tst + ' ' + 'test10');
         })
     },//*/

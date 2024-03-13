@@ -27,7 +27,7 @@ async.seq(
         clientV2.get('/api/books/ZT57/authors', function (err, req, res, authors) {
             assert.ifError(err);
             //console.log('get %j', authors);
-            assert.deepEqual(authors, [{id:1,firstname:"Pierre",lastname:"Durand",books:[{isbn:"ZT56"},{isbn:"ZT57"}]}], 'Pb get (test2)')
+            assert.deepEqual(authors, [{id:1,firstname:"Pierre",lastname:"Durand",books:[{isbn:"ZT56"},{isbn:"ZT57"}],"_id":authors[0]._id,"__v":authors[0].__v}], 'Pb get (test2)')
             callback(null, tst + ' ' + 'test2');
         })
     },
